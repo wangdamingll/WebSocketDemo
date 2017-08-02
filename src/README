@@ -1,0 +1,17 @@
+1、此为根据websocket协议自己实现的demo
+
+2、websocket客户端：
+网友写好的客户端测试工具网址：http://www.blue-zero.com/WebSocket/
+							  格式：	ws://IP:9000
+							  example:	ws://192.168.9.131:9000
+							  
+demo里面自带了一个简易的客户端测试工具：test.html
+只能连接、发送、关闭，未实现接受服务器返回的请求功能
+
+3、demo文件结构
+1）采用cmake编译方式
+2）.cpp/.h结构
+network_interface.cpp/h : 为epoll相关操作类
+websocket_request.cpp/h : 为处理客户端发来的请求类
+websocket_respond.cpp/h : 为处理响应客户端请求的类
+websocket_handler.cpp/h : 具体逻辑处理的类
