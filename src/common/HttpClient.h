@@ -4,6 +4,7 @@
 #include <string>
 #include <stdint.h>
 #include <map>
+#include <iconv.h>
 
 typedef std::map<std::string, std::string> URL_PARAMS;
 

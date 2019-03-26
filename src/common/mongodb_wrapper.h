@@ -23,6 +23,8 @@ extern "C"{
 }
 #include <stdint.h>
 #include <string>
+#include <memory>
+#include <climits>
 #include "debugtrace.h"
 #include "mongodb/bson.h"
 #include "mongodb/mongo.h"
