@@ -1,50 +1,66 @@
-<!DOCTYPE HTML>  
-<html>  
-<head>  
-    <meta http-equiv="content-type" content="text/html" />  
-    <meta name="author" content="https://github.com/jice1001" />  
-    <title>websocket test</title>  
-    <script>
-		var socket;  
-		function Connect(){  
-			try{  
-				socket=new WebSocket('ws://192.168.9.131:9000');  
-			}catch(e){  
-				alert('error');  
-				return;  
-			}  
-			socket.onopen = sOpen;  
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html" />
+	<meta name="author" content="https://github.com/jice1001" />
+	<title>websocket test</title>
+	<script>
+		var socket;
+		function logLine(text) {
+			var el = document.getElementById("log");
+			if (el) el.textContent += text + "\n";
+		}
+		function Connect(){
+			try{
+				/* 按实际环境改成 ws://本机IP或域名:9000 */
+				socket = new WebSocket('ws://127.0.0.1:9000');
+			}catch(e){
+				alert('error');
+				return;
+			}
+			socket.onopen = sOpen;
 			socket.onerror = sError;
-			socket.onmessage= sMessage;
-			socket.onclose= sClose;
-		}  
+			socket.onmessage = sMessage;
+			socket.onclose = sClose;
+		}
 		function sOpen(){
+			logLine("[已连接]");
 			alert('connect success!');
 		}
 		function sError(e){
-			alert("error " + e);
+			alert("error: " + (e.message || e));
 		}
-		function sMessage(msg){  
-			alert('server says:' + msg);  
+		/* 参数是 MessageEvent，文本在 .data（与 socket.send 发出的内容一致，本服务端为回显） */
+		function sMessage(ev){
+			var text = (typeof ev.data === "string") ? ev.data : String(ev.data);
+			logLine("服务端回显: " + text);
+			alert('server says: ' + text);
 		}
 		function sClose(e){
+			logLine("[已断开] code=" + e.code);
 			alert("connect closed:" + e.code);
-		}  
+		}
 		function Send(){
-			socket.send(document.getElementById("msg").value);
-		} 
+			if (!socket || socket.readyState !== WebSocket.OPEN) {
+				alert("请先连接");
+				return;
+			}
+			var v = document.getElementById("msg").value;
+			socket.send(v);
+			logLine("我发送: " + v);
+		}
 		function Close(){
-			socket.close();
-		}  
+			if (socket) socket.close();
+		}
 	</script>
-</head>  
-   
-<body>  
-<input id="msg" type="text">  
-<button id="connect" onclick="Connect();">Connect</button>  
-<button id="send" onclick="Send();">Send</button>  
-<button id="close" onclick="Close();">Close</button>
+</head>
 
-</body>  
-   
-</html>  
+<body>
+<input id="msg" type="text" placeholder="输入后点 Send">
+<button id="connect" onclick="Connect();">Connect</button>
+<button id="send" onclick="Send();">Send</button>
+<button id="close" onclick="Close();">Close</button>
+<pre id="log" style="margin-top:12px;padding:8px;border:1px solid #ccc;max-height:240px;overflow:auto;"></pre>
+</body>
+
+</html>

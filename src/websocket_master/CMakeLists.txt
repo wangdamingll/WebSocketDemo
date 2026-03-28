@@ -18,8 +18,10 @@ add_executable(websocketserver
             ${SRC_TOOLS}
 )
 
+add_dependencies(websocketserver common)
+
 TARGET_LINK_LIBRARIES(websocketserver
-					common.a
+					${CMAKE_BINARY_DIR}/src/common/libcommon.a
 					rt 
                     z
                     
